@@ -22,7 +22,7 @@ private HashMap<String,List<String>> listHash;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        listView = (ExpandableListView)findViewById(R.id.all);
+        listView = (ExpandableListView)findViewById(R.id.listExp);
         initData();
         listAdapter = new ExpandableListAdapter(this, listDataHeader,listHash);
         listView.setAdapter(listAdapter);
