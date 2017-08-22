@@ -1,17 +1,23 @@
 package com.example.maksimnedyalkov.javacrypto;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.example.maksimnedyalkov.javacrypto.Model.CryptoCoinInfoModel;
 
 import org.w3c.dom.Text;
 
 import java.util.HashMap;
 import java.util.List;
+
 
 /**
  * Created by Maksim.Nedyalkov on 8/2/2017.
@@ -20,9 +26,9 @@ import java.util.List;
 public class ExpandableListAdapter extends BaseExpandableListAdapter {
     private Context context;
     private List<String> listDataHeader;
-    private HashMap<String,List<String>> listHashMap;
+    private HashMap<String,CryptoCoinInfoModel> listHashMap;
 
-    public ExpandableListAdapter(Context context, List<String> listDataHeader, HashMap<String, List<String>> listHashMap) {
+    public ExpandableListAdapter(Context context, List<String> listDataHeader, HashMap<String, CryptoCoinInfoModel> listHashMap) {
         this.context = context;
         this.listDataHeader = listDataHeader;
         this.listHashMap = listHashMap;
@@ -35,7 +41,8 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
 
     @Override
     public int getChildrenCount(int i) {
-        return listHashMap.get(listDataHeader.get(i)).size();
+        return 1;
+        //return listHashMap.get(listDataHeader.get(i)).size();
     }
 
     @Override
@@ -45,7 +52,8 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
 
     @Override
     public Object getChild(int i, int i1) {
-        return listHashMap.get(listDataHeader.get(i)).get(i1); // i = Group Item , i1 = ChildItem
+        return listHashMap.get(listDataHeader.get(i));
+        //return listHashMap.get(listDataHeader.get(i)).get(i1); // i = Group Item , i1 = ChildItem
     }
 
     @Override
@@ -79,7 +87,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
 
     @Override
     public View getChildView(int i, int i1, boolean b, View view, ViewGroup viewGroup) {
-        final String childText = (String)getChild(i,i1);
+        final CryptoCoinInfoModel child = (CryptoCoinInfoModel)getChild(i,i1);
         if(view == null)
         {
             LayoutInflater inflater = (LayoutInflater)this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -87,8 +95,18 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         }
 
         TextView txtListChild = (TextView)view.findViewById(R.id.lblListItem);
-        txtListChild.setText(childText);
+        txtListChild.setText(child.symbol);
+
+        String cryptoImage = child.image;
+        Context c = context.getApplicationContext();
+        int id = c.getResources().getIdentifier("drawable/"+cryptoImage, null, c.getPackageName());
+        ((ImageView)view.findViewById(R.id.cryptoImage)).setImageResource(id);
+
         return view;
+    }
+
+    public static int getImageId(Context context, String imageName) {
+        return context.getResources().getIdentifier("drawable/" + imageName, null, context.getPackageName());
     }
 
     @Override
